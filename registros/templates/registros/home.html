@@ -1,0 +1,11 @@
+{% block content %}
+
+  <h1> DanyLogs, Tu agenda virtual </h1>
+  <h3> Tus Últimos 10 Registros </h3>
+  <ul>
+    {% for registro in object_list %}
+      <li><a href="{% url 'registros:registro_detallado' pk=registro.pk %}">{{ registro.Bache }}</a></li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'registros:registro_wizard' %}" class="btn btn-primary">Crear nuevo registro</a>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% block content %}
+  <h1>Detalles del registro {{ object.Bache }}</h1>
+  <ul>
+    <li><strong>Bache:</strong> {{ object.Bache }}</li>
+    <li><strong>Fecha:</strong> {{ object.Fecha }}</li>
+    <li><strong>Gramos de Mora:</strong> {{ object.Gramos_de_Mora }}</li>
+    <li><strong>Gramos de Azúcar:</strong> {{ object.Gramos_de_Azucar }}</li>
+    <li><strong>Gramos de Sorbato:</strong> {{ object.Gramos_de_Sorbato }}</li>
+    <li><strong>Hora de Inicio:</strong> {{ object.Hora_Inicio }}</li>
+    <li><strong>Primer Hervor:</strong> {{ object.Primer_Hervor }}</li>
+    <li><strong>Pausa de enfriado:</strong> {{ object.Pausa_de_enfriado }}</li>
+    <li><strong>Despulpado:</strong> {{ object.Despulpado }}</li>
+    <li><strong>Última Cocción:</strong> {{ object.Ultima_Coccion }}</li>
+    <li><strong>Hora Final:</strong> {{ object.Hora_Final }}</li>
+    <li><strong>Desechos de Mora:</strong> {{ object.Desechos_Mora }}</li>
+    <li><strong>Semilla:</strong> {{ object.Semilla }}</li>
+    <li><strong>Pulpa:</strong> {{ object.Pulpa }}</li>
+    <li><strong>Valor Primer Brix:</strong> {{ object.Valor_Primer_Brix }}</li>
+    <li><strong>Hora Primer Brix:</strong> {{ object.Hora_Primer_Brix }}</li>
+    <li><strong>Valor Brix Final:</strong> {{ object.Valor_Brix_Final }}</li>
+    <li><strong>Hora Brix Final:</strong> {{ object.Hora_Brix_Final }}</li>
+    <li><strong>Paquete 250 gr:</strong> {{ object.Paquete_250_gr }}</li>
+    <li><strong>Paquete 500 gr:</strong> {{ object.Paquete_500_gr }}</li>
+    <li><strong>Paquete 5000 gr:</strong> {{ object.Paquete_5000_gr }}</li>
+  </ul>
+  <a href="{% url 'registros:home' %}">Volver a la lista de registros</a>
+{% endblock %}
