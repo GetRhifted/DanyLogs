@@ -3,7 +3,7 @@ from .forms import RegistroGeneralForm, RegistroIngredientesForm, RegistroTiempo
 from formtools.wizard.views import SessionWizardView
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
-from django.views.generic import ListView, TemplateView, DetailView
+from django.views.generic import ListView, TemplateView, DetailView, UpdateView
 from. models import Registro
 
 class HomeView(ListView):
@@ -65,6 +65,54 @@ class RegistroCompletadoView(TemplateView):
 class RegistroDetalladoView(DetailView):
     model = Registro
     template_name = 'registros/registro_detallado.html'
+
+class RegistroUpdateView(UpdateView):
+     model = Registro
+     form_class = RegistroGeneralForm
+     template_name = 'registros/edicion_registro.html'
+     
+     def get_success_url(self):
+        return reverse_lazy('registros:edicion_registro2', kwargs={'pk': self.object.pk})
+
+class RegistroUpdateView2(UpdateView):
+     model = Registro
+     form_class = RegistroIngredientesForm
+     template_name = 'registros/edicion_registro2.html'
+     
+     def get_success_url(self):
+        return reverse_lazy('registros:edicion_registro3', kwargs={'pk': self.object.pk})
+
+class RegistroUpdateView3(UpdateView):
+     model = Registro
+     form_class = RegistroTiemposForm
+     template_name = 'registros/edicion_registro3.html'
+     
+     def get_success_url(self):
+        return reverse_lazy('registros:edicion_registro4', kwargs={'pk': self.object.pk})
+
+class RegistroUpdateView4(UpdateView):
+     model = Registro
+     form_class = RegistroDesechosForm
+     template_name = 'registros/edicion_registro4.html'
+     
+     def get_success_url(self):
+        return reverse_lazy('registros:edicion_registro5', kwargs={'pk': self.object.pk})
+
+class RegistroUpdateView5(UpdateView):
+     model = Registro
+     form_class = RegistroBrixForm
+     template_name = 'registros/edicion_registro5.html'
+     
+     def get_success_url(self):
+        return reverse_lazy('registros:edicion_registro6', kwargs={'pk': self.object.pk})
+
+class RegistroUpdateView6(UpdateView):
+     model = Registro
+     form_class = RegistroPaquetesForm
+     template_name = 'registros/edicion_registro6.html'
+     
+     def get_success_url(self):
+        return reverse_lazy('registros:registro_detallado', kwargs={'pk': self.object.pk})
 
 
 

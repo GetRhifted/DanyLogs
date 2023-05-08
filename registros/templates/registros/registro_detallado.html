@@ -24,4 +24,5 @@
     <li><strong>Paquete 5000 gr:</strong> {{ object.Paquete_5000_gr }}</li>
   </ul>
   <a href="{% url 'registros:home' %}">Volver a la lista de registros</a>
+  <a href="{% url 'registros:edicion_registro' object.pk %}">Editar Registro</a>
 {% endblock %}

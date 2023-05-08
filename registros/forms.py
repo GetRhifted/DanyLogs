@@ -47,3 +47,4 @@ class RegistroPaquetesForm(forms.ModelForm):
     class Meta:
         model = Registro
         fields = ['Paquete_250_gr', 'Paquete_500_gr', 'Paquete_5000_gr']
+
