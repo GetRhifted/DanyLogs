@@ -8,6 +8,8 @@ from. models import Registro
 from django.conf import settings
 from django.core.exceptions import ValidationError
 import openpyxl
+from django.db.models import Q
+
 
 
 
@@ -207,6 +209,24 @@ class CompararRegistrosView(FormView):
         libro.save(response)
 
         return response
+
+class BuscarRegistroView(ListView):
+    model = Registro
+    template_name = 'registros/busqueda.html'
+    context_object_name = 'registros'
+    paginate_by = 10
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Registro.objects.filter(Q(Bache__icontains=query))
+        else:
+            return Registro.objects.none()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q', '')
+        return context
     
 
 

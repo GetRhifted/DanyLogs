@@ -16,4 +16,5 @@ urlpatterns = [
     path('edicion_registro6/<int:pk>/', views.RegistroUpdateView6.as_view(), name='edicion_registro6'),
     path('comparar_registros/', views.CompararRegistrosView.as_view(), name='comparar_registros'),
     path('borrar_registro/<int:pk>/', views.RegistroDeleteView.as_view(), name='borrar_registro'),
+    path('busqueda/', views.BuscarRegistroView.as_view(), name='busqueda'),
 ]

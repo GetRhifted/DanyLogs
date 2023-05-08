@@ -1,0 +1,19 @@
+{% block content %}
+  <h1>Resultados de búsqueda</h1>
+  <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'registros:busqueda' %}">
+    <input class="form-control mr-sm-2" type="search" name="q" placeholder="Buscar..." aria-label="Buscar">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+  </form>
+  <ul>
+    {% if registros %}
+      {% for registro in registros %}
+        <li><a href="{% url 'registros:registro_detallado' pk=registro.pk %}">{{ registro.Bache }}</a></li>
+      {% endfor %}
+    {% else %}
+      <p>No se encontraron resultados.</p>
+    {% endif %}
+  </ul>
+  <a href="{% url 'registros:home' %}" class="btn btn-primary">Volver a la Pagina Principal</a>
+  <a href="{% url 'registros:comparar_registros' %}" class="btn btn-primary">Comparar Registros</a>
+{% endblock %}
+

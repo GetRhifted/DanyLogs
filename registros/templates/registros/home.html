@@ -1,11 +1,33 @@
-{% block content %}
+{% load static %}
 
-  <h1> DanyLogs, Tu agenda virtual </h1>
-  <h3> Tus Últimos 10 Registros </h3>
-  <ul>
-    {% for registro in object_list %}
-      <li><a href="{% url 'registros:registro_detallado' pk=registro.pk %}">{{ registro.Bache }}</a></li>
-    {% endfor %}
-  </ul>
-  <a href="{% url 'registros:registro_wizard' %}" class="btn btn-primary">Crear nuevo registro</a>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Título de la página</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+</head>
+<body>
+  <div class="container">
+    {% block content %}
+      <div class="col-md-9">
+        <h1 class="main-heading">DanyLogs, Tu agenda virtual</h1>
+        <div class="search-form">
+          <form action="{% url 'registros:busqueda' %}" method="GET">
+            <input type="text" name="q" placeholder="Buscar registro...">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+          </form>
+        </div>
+        <h3>Tus últimos 10 registros</h3>
+        <ul class="record-list">
+          {% for registro in object_list %}
+            <li><a href="{% url 'registros:registro_detallado' pk=registro.pk %}">{{ registro.Bache }}</a></li>
+          {% endfor %}
+        </ul>
+        <a href="{% url 'registros:registro_wizard' %}" class="btn btn-primary">Crear nuevo registro</a>
+      </div>
+    </div>
+  </div>
 {% endblock %}
+  </div>
+</body>
+</html>
