@@ -29,4 +29,7 @@ class Registro(models.Model):
     Paquete_500_gr = models.IntegerField(default=0)
     Paquete_5000_gr = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.Bache
+
 

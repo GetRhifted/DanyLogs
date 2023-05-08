@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect
-from .forms import RegistroGeneralForm, RegistroIngredientesForm, RegistroTiemposForm, RegistroDesechosForm, RegistroBrixForm, RegistroPaquetesForm, SeleccionarRegistrosForm
+from .forms import RegistroGeneralForm, RegistroIngredientesForm, RegistroTiemposForm, RegistroDesechosForm, RegistroBrixForm, RegistroPaquetesForm, CompararRegistrosForm
 from formtools.wizard.views import SessionWizardView
 from django.urls import reverse_lazy, reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic import ListView, TemplateView, DetailView, UpdateView, FormView, DeleteView
 from. models import Registro
+from django.conf import settings
+from django.core.exceptions import ValidationError
+import openpyxl
+
+
 
 class HomeView(ListView):
     model = Registro
@@ -123,21 +128,192 @@ class RegistroDeleteView(DeleteView):
 
 class CompararRegistrosView(FormView):
     template_name = 'registros/comparar_registros.html'
-    form_class = SeleccionarRegistrosForm
-    success_url = reverse_lazy('registros:mostrar_registros')
+    form_class = CompararRegistrosForm
 
     def form_valid(self, form):
-        registros_seleccionados = form.cleaned_data.get('registros')
-        registros = Registro.objects.filter(id__in=registros_seleccionados)
-        self.request.session['registros'] = list(registros.values())
-        return redirect('registros:mostrar_registros')
+        registros = form.cleaned_data['registros']
+        if registros.count() < settings.NUMERO_MINIMO_REGISTROS:
+            form.add_error(
+                'registros',
+                ValidationError(f'Seleccione al menos {settings.NUMERO_MINIMO_REGISTROS} registros.'),
+            )
+            return self.form_invalid(form)
 
-class MostrarRegistrosView(ListView):
-    template_name = 'registros/mostrar_registros.html'
-    model = Registro
+        # Obtener los datos de los registros seleccionados
+        datos = []
+        for registro in registros:
+            datos.append([
+                registro.Bache,
+                registro.Fecha,
+                registro.Gramos_de_Mora,
+                registro.Gramos_de_Azucar,
+                registro.Gramos_de_Sorbato,
+                registro.Hora_Inicio,
+                registro.Primer_Hervor,
+                registro.Pausa_de_enfriado,
+                registro.Despulpado,
+                registro.Ultima_Coccion,
+                registro.Hora_Final,
+                registro.Desechos_Mora,
+                registro.Semilla,
+                registro.Pulpa,
+                registro.Valor_Primer_Brix,
+                registro.Hora_Primer_Brix,
+                registro.Valor_Brix_Final,
+                registro.Hora_Brix_Final,
+                registro.Paquete_250_gr,
+                registro.Paquete_500_gr,
+                registro.Paquete_5000_gr,
+            ])
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        registros = self.request.session.get('registros')
-        context['registros'] = registros
-        return context
+        # Crear un libro de Excel y una hoja de cálculo
+        libro = openpyxl.Workbook()
+        hoja = libro.active
+
+        # Escribir los encabezados de la tabla
+        hoja.append([
+            'Bache',
+            'Fecha',
+            'Gramos de Mora Usados',
+            'Gramos de Azúcar',
+            'Gramos de Sorbato',
+            'Hora Inicio',
+            'Primer Hervor',
+            'Pausa de enfriado',
+            'Despulpado',
+            'Última Cocción',
+            'Hora Final',
+            'Desechos Mora',
+            'Semilla',
+            'Pulpa',
+            'Valor Primer Brix',
+            'Hora Primer Brix',
+            'Valor Brix Final',
+            'Hora Brix Final',
+            'Paquete 250 gr',
+            'Paquete 500 gr',
+            'Paquete 5000 gr',
+        ])
+
+        # Escribir los datos de los registros
+        for fila in datos:
+            hoja.append(fila)
+
+        # Crear una respuesta HTTP con el archivo de Excel como contenido
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=registros.xlsx'
+
+        # Guardar el libro de Excel en el objeto response
+        libro.save(response)
+
+        return response
+    
+
+
+
+    # def crear_hoja(registros, nombre_hoja):
+#     # Crear libro de excel
+#     libro = openpyxl.Workbook()
+#     hoja = libro.active
+#     hoja.title = nombre_hoja
+
+#     # Escribir encabezados de columna
+#     encabezados = ['Bache', 'Fecha', 'Gramos de Mora', 'Gramos de Azucar', 'Gramos de Sorbato', 'Hora Inicio', 'Primer Hervor', 'Pausa de enfriado', 'Despulpado', 'Ultima Coccion', 'Hora Final', 'Desechos Mora', 'Semilla', 'Pulpa', 'Valor Primer Brix', 'Hora Primer Brix', 'Valor Brix Final', 'Hora Brix Final', 'Paquete 250 gr', 'Paquete 500 gr', 'Paquete 5000 gr']
+#     for i, encabezado in enumerate(encabezados):
+#         celda = hoja.cell(row=1, column=i+1)
+#         celda.value = encabezado
+
+#     # Escribir datos de registros
+#     for i, registro in enumerate(registros):
+#         fila = i+2  # Empezar en la segunda fila
+#         hoja.cell(row=fila, column=1, value=registro.Bache)
+#         hoja.cell(row=fila, column=2, value=registro.Fecha)
+#         hoja.cell(row=fila, column=3, value=registro.Gramos_de_Mora)
+#         hoja.cell(row=fila, column=4, value=registro.Gramos_de_Azucar)
+#         hoja.cell(row=fila, column=5, value=registro.Gramos_de_Sorbato)
+#         hoja.cell(row=fila, column=6, value=registro.Hora_Inicio)
+#         hoja.cell(row=fila, column=7, value=registro.Primer_Hervor)
+#         hoja.cell(row=fila, column=8, value=registro.Pausa_de_enfriado)
+#         hoja.cell(row=fila, column=9, value=registro.Despulpado)
+#         hoja.cell(row=fila, column=10, value=registro.Ultima_Coccion)
+#         hoja.cell(row=fila, column=11, value=registro.Hora_Final)
+#         hoja.cell(row=fila, column=12, value=registro.Desechos_Mora)
+#         hoja.cell(row=fila, column=13, value=registro.Semilla)
+#         hoja.cell(row=fila, column=14, value=registro.Pulpa)
+#         hoja.cell(row=fila, column=15, value=registro.Valor_Primer_Brix)
+#         hoja.cell(row=fila, column=16, value=registro.Hora_Primer_Brix)
+#         hoja.cell(row=fila, column=17, value=registro.Valor_Brix_Final)
+#         hoja.cell(row=fila, column=18, value=registro.Hora_Brix_Final)
+#         hoja.cell(row=fila, column=19, value=registro.Paquete_250_gr)
+#         hoja.cell(row=fila, column=20, value=registro.Paquete_500_gr)
+#         hoja.cell(row=fila, column=21, value=registro.Paquete_5000_gr)
+
+#     return libro
+
+# def crear_archivo_excel(registros):
+#     # Crear un libro de Excel y una hoja
+#     wb = openpyxl.Workbook()
+#     ws = wb.active
+
+#     # Agregar encabezados de columna
+#     encabezados = [
+#         'Bache',
+#         'Fecha',
+#         'Gramos de Mora',
+#         'Gramos de Azucar',
+#         'Gramos de Sorbato',
+#         'Hora de Inicio',
+#         'Primer Hervor',
+#         'Pausa de enfriado',
+#         'Despulpado',
+#         'Ultima Coccion',
+#         'Hora Final',
+#         'Desechos Mora',
+#         'Semilla',
+#         'Pulpa',
+#         'Valor Primer Brix',
+#         'Hora Primer Brix',
+#         'Valor Brix Final',
+#         'Hora Brix Final',
+#         'Paquete 250 gr',
+#         'Paquete 500 gr',
+#         'Paquete 5000 gr',
+#     ]
+#     ws.append(encabezados)
+
+#     # Agregar datos de registros
+#     for registro in registros:
+#         datos_registro = [
+#             registro.Bache,
+#             registro.Fecha,
+#             registro.Gramos_de_Mora,
+#             registro.Gramos_de_Azucar,
+#             registro.Gramos_de_Sorbato,
+#             registro.Hora_Inicio,
+#             registro.Primer_Hervor,
+#             registro.Pausa_de_enfriado,
+#             registro.Despulpado,
+#             registro.Ultima_Coccion,
+#             registro.Hora_Final,
+#             registro.Desechos_Mora,
+#             registro.Semilla,
+#             registro.Pulpa,
+#             registro.Valor_Primer_Brix,
+#             registro.Hora_Primer_Brix,
+#             registro.Valor_Brix_Final,
+#             registro.Hora_Brix_Final,
+#             registro.Paquete_250_gr,
+#             registro.Paquete_500_gr,
+#             registro.Paquete_5000_gr,
+#         ]
+#         ws.append(datos_registro)
+
+#     # Crear respuesta HTTP y agregar archivo Excel a ella
+#     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+#     response['Content-Disposition'] = 'attachment; filename=registros.xlsx'
+#     wb.save(response)
+
+#     return response
+
+
+

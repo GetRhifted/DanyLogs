@@ -25,6 +25,7 @@
   </ul>
   <a href="{% url 'registros:home' %}">Volver a la lista de registros</a>
   <a href="{% url 'registros:edicion_registro' object.pk %}">Editar Registro</a>
+  <a href="{% url 'registros:comparar_registros' %}">Compara tu Registro</a>
   <form action="{% url 'registros:borrar_registro' object.pk %}" method="post" class="d-inline">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('¿Estás seguro de que deseas borrar este registro?')">Borrar registro</button>

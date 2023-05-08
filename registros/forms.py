@@ -52,3 +52,9 @@ class RegistroPaquetesForm(forms.ModelForm):
 class SeleccionarRegistrosForm(forms.Form):
     registros = forms.ModelMultipleChoiceField(queryset=Registro.objects.all())
 
+class CompararRegistrosForm(forms.Form):
+    registros = forms.ModelMultipleChoiceField(
+        queryset=Registro.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+    )
+
