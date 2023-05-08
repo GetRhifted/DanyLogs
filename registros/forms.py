@@ -48,3 +48,7 @@ class RegistroPaquetesForm(forms.ModelForm):
         model = Registro
         fields = ['Paquete_250_gr', 'Paquete_500_gr', 'Paquete_5000_gr']
 
+
+class SeleccionarRegistrosForm(forms.Form):
+    registros = forms.ModelMultipleChoiceField(queryset=Registro.objects.all())
+

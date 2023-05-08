@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
-from .forms import RegistroGeneralForm, RegistroIngredientesForm, RegistroTiemposForm, RegistroDesechosForm, RegistroBrixForm, RegistroPaquetesForm
+from .forms import RegistroGeneralForm, RegistroIngredientesForm, RegistroTiemposForm, RegistroDesechosForm, RegistroBrixForm, RegistroPaquetesForm, SeleccionarRegistrosForm
 from formtools.wizard.views import SessionWizardView
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
-from django.views.generic import ListView, TemplateView, DetailView, UpdateView
+from django.views.generic import ListView, TemplateView, DetailView, UpdateView, FormView, DeleteView
 from. models import Registro
 
 class HomeView(ListView):
@@ -115,5 +115,29 @@ class RegistroUpdateView6(UpdateView):
         return reverse_lazy('registros:registro_detallado', kwargs={'pk': self.object.pk})
 
 
+class RegistroDeleteView(DeleteView):
+    model = Registro
+    template_name = 'registros/borrar_registro.html'
+    success_url = reverse_lazy('registros:home')
 
 
+class CompararRegistrosView(FormView):
+    template_name = 'registros/comparar_registros.html'
+    form_class = SeleccionarRegistrosForm
+    success_url = reverse_lazy('registros:mostrar_registros')
+
+    def form_valid(self, form):
+        registros_seleccionados = form.cleaned_data.get('registros')
+        registros = Registro.objects.filter(id__in=registros_seleccionados)
+        self.request.session['registros'] = list(registros.values())
+        return redirect('registros:mostrar_registros')
+
+class MostrarRegistrosView(ListView):
+    template_name = 'registros/mostrar_registros.html'
+    model = Registro
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        registros = self.request.session.get('registros')
+        context['registros'] = registros
+        return context
