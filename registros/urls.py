@@ -21,6 +21,6 @@ urlpatterns = [
     path('busqueda/', login_required(views.BuscarRegistroView.as_view()), name='busqueda'),
     path('registro_usuario/', views.RegistroUsuarioView.as_view(), name='registro_usuario'),
     path('login/', LoginView.as_view(template_name='registros/login.html'), name='login'),
-    path('logout/', LogoutView.as_view(), name='registros/logout'),
+    path('logout/', LogoutView.as_view(), name='logout'),
 
 ]

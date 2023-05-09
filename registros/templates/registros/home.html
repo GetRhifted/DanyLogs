@@ -8,6 +8,13 @@
 </head>
 <body>
   <div class="container">
+    <div class="header">
+      {% if user.is_authenticated %}
+        <p>Bienvenid@, {{ user.username }} <a href="{% url 'registros:logout' %}">(Cerrar sesión)</a></p>
+      {% else %}
+        <p><a href="{% url 'login' %}">Iniciar sesión</a></p>
+      {% endif %}
+    </div>
     {% block content %}
       <div class="col-md-9">
         <h1 class="main-heading">DanyLogs, Tu agenda virtual</h1>
