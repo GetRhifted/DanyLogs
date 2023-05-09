@@ -1,6 +1,10 @@
 from django import forms
-from .models import Registro
 from django.forms.widgets import TimeInput, DateInput
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
+from .models import Registro
+
 
 class RegistroGeneralForm(forms.ModelForm):
     class Meta:
@@ -57,4 +61,13 @@ class CompararRegistrosForm(forms.Form):
         queryset=Registro.objects.all(),
         widget=forms.CheckboxSelectMultiple,
     )
+
+class RegistrodeUsuarioForm(UserCreationForm):
+    password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Confirma tu Contraseña', widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ['username', 'password1', 'password2']
+        #help_text = {k:'' for k in fields}
 

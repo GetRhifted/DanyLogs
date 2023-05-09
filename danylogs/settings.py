@@ -125,3 +125,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 NUMERO_MINIMO_REGISTROS = 2
+
+LOGIN_REDIRECT_URL = 'registros:home'
+LOGOUT_REDIRECT_URL = 'registros:login'
+LOGIN_URL = 'registros:login'

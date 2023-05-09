@@ -1,15 +1,19 @@
 from django.shortcuts import render, redirect
-from .forms import RegistroGeneralForm, RegistroIngredientesForm, RegistroTiemposForm, RegistroDesechosForm, RegistroBrixForm, RegistroPaquetesForm, CompararRegistrosForm
-from formtools.wizard.views import SessionWizardView
 from django.urls import reverse_lazy, reverse
-from django.http import HttpResponseRedirect, HttpResponse
-from django.views.generic import ListView, TemplateView, DetailView, UpdateView, FormView, DeleteView
-from. models import Registro
+from django.http import HttpResponse
+from django.views.generic import ListView, TemplateView, DetailView, UpdateView, FormView, DeleteView, CreateView
+from django.contrib.auth.views import LoginView, LogoutView
+from django.db.models import Q
 from django.conf import settings
 from django.core.exceptions import ValidationError
-import openpyxl
-from django.db.models import Q
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
 
+from .forms import RegistroGeneralForm, RegistroIngredientesForm, RegistroTiemposForm, RegistroDesechosForm, RegistroBrixForm, RegistroPaquetesForm, CompararRegistrosForm, RegistrodeUsuarioForm
+from. models import Registro
+
+import openpyxl
+from formtools.wizard.views import SessionWizardView
 
 
 
@@ -228,6 +232,29 @@ class BuscarRegistroView(ListView):
         context['query'] = self.request.GET.get('q', '')
         return context
     
+class RegistroUsuarioView(SuccessMessageMixin, CreateView):
+    template_name = 'registros/registro_usuario.html'
+    form_class = RegistrodeUsuarioForm
+    success_url = reverse_lazy('registros:home')
+    success_message = "Usuario %(username)s creado"
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        username = form.cleaned_data['username']
+        messages.success(self.request, self.success_message % {'username': username})
+        return response
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        for field in self.form_class.base_fields.values():
+            field.help_text = ''
+
+class LoginView(LoginView):
+    template_name = 'registros/login.html'
+    success_url = reverse_lazy('registros:home')
+
+class MiLogoutView(LogoutView):
+    next_page = reverse_lazy('registros:login')
 
 
 

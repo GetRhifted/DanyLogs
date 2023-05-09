@@ -2,7 +2,7 @@ from django.db import models
 import datetime
 
 class Registro(models.Model):
-    Bache = models.CharField(max_length=20)
+    Bache = models.CharField(max_length=100)
     Fecha = models.DateField()
 
     Gramos_de_Mora = models.FloatField(default=0.0)
