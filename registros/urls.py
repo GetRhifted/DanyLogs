@@ -6,7 +6,7 @@ from . import views
 app_name = 'registros'
 
 urlpatterns = [
-    path('home/', login_required(views.HomeView.as_view()), name='home'),
+    path('', login_required(views.HomeView.as_view()), name='home'),
     path('registro_wizard/', login_required(views.RegistroWizardView.as_view()), name='registro_wizard'),
     path('registro_completado/', login_required(views.RegistroCompletadoView.as_view()), name='registro_completado'),
     path('registro_detallado/<int:pk>/', login_required(views.RegistroDetalladoView.as_view()), name='registro_detallado'),
