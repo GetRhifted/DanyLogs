@@ -69,5 +69,5 @@ class RegistrodeUsuarioForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'password1', 'password2']
-        #help_text = {k:'' for k in fields}
+        
 

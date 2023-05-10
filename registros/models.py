@@ -1,7 +1,7 @@
 from django.db import models
-import datetime
+from django.contrib.auth.models import User
 
-class Registro(models.Model):
+class Registro(models.Model):    
     Bache = models.CharField(max_length=100)
     Fecha = models.DateField()
 
