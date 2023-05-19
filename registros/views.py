@@ -13,6 +13,7 @@ from .forms import RegistroGeneralForm, RegistroIngredientesForm, RegistroTiempo
 from. models import Registro
 
 import openpyxl
+from openpyxl.styles import Border, Side, PatternFill
 from formtools.wizard.views import SessionWizardView
 
 
@@ -177,7 +178,7 @@ class CompararRegistrosView(FormView):
         hoja = libro.active
 
         # Escribir los encabezados de la tabla
-        hoja.append([
+        encabezados = [
             'Bache',
             'Fecha',
             'Gramos de Mora Usados',
@@ -199,11 +200,53 @@ class CompararRegistrosView(FormView):
             'Paquete 250 gr',
             'Paquete 500 gr',
             'Paquete 5000 gr',
-        ])
+        ]
+        hoja.append(encabezados)
 
         # Escribir los datos de los registros
         for fila in datos:
             hoja.append(fila)
+
+        # Crear una tabla con estilo en Excel
+        tabla = openpyxl.worksheet.table.Table(displayName="TablaRegistros", ref=f"A1:{openpyxl.utils.get_column_letter(len(encabezados))}{len(datos) + 1}")
+        hoja.add_table(tabla)
+
+        # Aplicar bordes a las celdas de la tabla
+        border = Border(left=Side(style='thin'), 
+                        right=Side(style='thin'), 
+                        top=Side(style='thin'), 
+                        bottom=Side(style='thin'))
+        for row in hoja.iter_rows(min_row=2, max_row=len(datos) + 1, min_col=1, max_col=len(encabezados)):
+            for cell in row:
+                cell.border = border
+        
+        color1 = "F6FDFF"  # Azul
+        color2 = "BBDEEA"  # Azul Grisaseo
+
+        # Aplicar los colores intercalados a las filas de la tabla
+        fill1 = PatternFill(start_color=color1, end_color=color1, fill_type="solid")
+        fill2 = PatternFill(start_color=color2, end_color=color2, fill_type="solid")
+
+        for i, row in enumerate(hoja.iter_rows(min_row=2, max_row=len(datos) + 1, min_col=1, max_col=len(encabezados)), start=1):
+            if i % 2 == 0:
+                for cell in row:
+                    cell.fill = fill1
+            else:
+                for cell in row:
+                    cell.fill = fill2
+
+        # Ajustar el ancho de las columnas
+        for columna in hoja.columns:
+            max_length = 0
+            column = columna[0].column_letter  # Obtiene la letra de la columna
+            for cell in columna:
+                try:
+                    if len(str(cell.value)) > max_length:
+                        max_length = len(cell.value)
+                except:
+                    pass
+            adjusted_width = (max_length + 2) * 1.5  # Ajusta el ancho de la columna
+            hoja.column_dimensions[column].width = adjusted_width
 
         # Crear una respuesta HTTP con el archivo de Excel como contenido
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
