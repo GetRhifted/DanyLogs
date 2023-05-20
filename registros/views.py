@@ -212,13 +212,15 @@ class CompararRegistrosView(FormView):
         hoja.add_table(tabla)
 
         # Aplicar bordes a las celdas de la tabla
-        border = Border(left=Side(style='thin'), 
-                        right=Side(style='thin'), 
-                        top=Side(style='thin'), 
-                        bottom=Side(style='thin'))
+        borde = Border(
+                left=Side(border_style="medium", color="000000"),
+                right=Side(border_style="medium", color="000000"),
+                top=Side(border_style="medium", color="000000"),
+                bottom=Side(border_style="medium", color="000000")
+        )
         for row in hoja.iter_rows(min_row=2, max_row=len(datos) + 1, min_col=1, max_col=len(encabezados)):
             for cell in row:
-                cell.border = border
+                cell.border = borde
         
         color1 = "F6FDFF"  # Azul
         color2 = "BBDEEA"  # Azul Grisaseo
