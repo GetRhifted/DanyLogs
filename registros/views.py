@@ -252,7 +252,7 @@ class CompararRegistrosView(FormView):
 
         # Crear una respuesta HTTP con el archivo de Excel como contenido
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=registros.xlsx'
+        response['Content-Disposition'] = 'attachment; filename=Registros.xlsx'
 
         # Guardar el libro de Excel en el objeto response
         libro.save(response)
