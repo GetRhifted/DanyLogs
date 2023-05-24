@@ -1,27 +1,31 @@
 {% block content %}
-  <h1>Detalles del registro {{ object.Bache }}</h1>
+  <h1>Detalles del registro {{ object.Canasta }}</h1>
   <ul>
-    <li><strong>Bache:</strong> {{ object.Bache }}</li>
+    <li><strong>Canasta:</strong> {{ object.Canasta }}</li>
     <li><strong>Fecha:</strong> {{ object.Fecha }}</li>
-    <li><strong>Gramos de Mora:</strong> {{ object.Gramos_de_Mora }}</li>
-    <li><strong>Gramos de Azúcar:</strong> {{ object.Gramos_de_Azucar }}</li>
-    <li><strong>Gramos de Sorbato:</strong> {{ object.Gramos_de_Sorbato }}</li>
-    <li><strong>Hora de Inicio:</strong> {{ object.Hora_Inicio }}</li>
-    <li><strong>Primer Hervor:</strong> {{ object.Primer_Hervor }}</li>
-    <li><strong>Pausa de enfriado:</strong> {{ object.Pausa_de_enfriado }}</li>
+    <li><strong>Contenido Total:</strong> {{ object.Contenido_Total }}</li>
+    <li><strong>Azúcar:</strong> {{ object.Azucar }}</li>
+    <li><strong>Sorbato:</strong> {{ object.Sorbato }}</li>
+    <li><strong>Producto no Conforme:</strong> {{ object.Producto_no_Conforme }}</li>
+    <li><strong>Fruta Seleccionada:</strong> {{ object.Fruta_Seleccionada }}</li>
+    <li><strong>Inicio:</strong> {{ object.Inicio }}</li>
+    <li><strong>Primera Cocción:</strong> {{ object.Primera_Coccion }}</li>
+    <li><strong>Enfriamiento:</strong> {{ object.Enfriamiento }}</li>
     <li><strong>Despulpado:</strong> {{ object.Despulpado }}</li>
-    <li><strong>Última Cocción:</strong> {{ object.Ultima_Coccion }}</li>
+    <li><strong>Segunda Cocción:</strong> {{ object.Segunda_Coccion }}</li>
+    <li><strong>Empaque:</strong> {{ object.Empaque }}</li>
     <li><strong>Hora Final:</strong> {{ object.Hora_Final }}</li>
-    <li><strong>Desechos de Mora:</strong> {{ object.Desechos_Mora }}</li>
     <li><strong>Semilla:</strong> {{ object.Semilla }}</li>
     <li><strong>Pulpa:</strong> {{ object.Pulpa }}</li>
     <li><strong>Valor Primer Brix:</strong> {{ object.Valor_Primer_Brix }}</li>
     <li><strong>Hora Primer Brix:</strong> {{ object.Hora_Primer_Brix }}</li>
     <li><strong>Valor Brix Final:</strong> {{ object.Valor_Brix_Final }}</li>
     <li><strong>Hora Brix Final:</strong> {{ object.Hora_Brix_Final }}</li>
-    <li><strong>Paquete 250 gr:</strong> {{ object.Paquete_250_gr }}</li>
-    <li><strong>Paquete 500 gr:</strong> {{ object.Paquete_500_gr }}</li>
-    <li><strong>Paquete 5000 gr:</strong> {{ object.Paquete_5000_gr }}</li>
+    <li><strong>Producto Terminado:</strong> {{ object.Producto_Terminado }}</li>
+    <li><strong>Media Libra:</strong> {{ object.Media_Libra }}</li>
+    <li><strong>Libra:</strong> {{ object.Libra }}</li>
+    <li><strong>Bolsa Cinco kg:</strong> {{ object.Bolsa_Cinco_kg }}</li>
+    <li><strong>Otro:</strong> {{ object.Otro }}</li>
   </ul>
   <a href="{% url 'registros:home' %}">Volver a la lista de registros</a>
   <a href="{% url 'registros:edicion_registro' object.pk %}">Editar Registro</a>

@@ -9,34 +9,35 @@ from .models import Registro
 class RegistroGeneralForm(forms.ModelForm):
     class Meta:
         model = Registro
-        fields = ['Bache', 'Fecha']
+        fields = ['Canasta', 'Fecha']
         widgets = {
             'Fecha': DateInput(attrs={'type': 'date'})
         }
 
-class RegistroIngredientesForm(forms.ModelForm):
+class RegistroCanastaForm(forms.ModelForm):
     class Meta:
         model = Registro
-        fields = ['Gramos_de_Mora', 'Gramos_de_Azucar', 'Gramos_de_Sorbato']
+        fields = ['Contenido_Total', 'Azucar', 'Sorbato', 'Producto_no_Conforme', 'Fruta_Seleccionada']
 
 class RegistroTiemposForm(forms.ModelForm):
     class Meta:
         model = Registro
-        fields = ['Hora_Inicio', 'Primer_Hervor', 'Pausa_de_enfriado', 'Despulpado',
-                  'Ultima_Coccion', 'Hora_Final']
+        fields = ['Inicio', 'Primera_Coccion', 'Enfriamiento', 'Despulpado',
+                  'Segunda_Coccion', 'Empaque', 'Hora_Final']
         widgets = {
-            'Hora_Inicio': TimeInput(attrs={'type': 'time'}),
-            'Primer_Hervor': TimeInput(attrs={'type': 'time'}),
-            'Pausa_de_enfriado': TimeInput(attrs={'type': 'time'}),
+            'Inicio': TimeInput(attrs={'type': 'time'}),
+            'Primera_Coccion': TimeInput(attrs={'type': 'time'}),
+            'Enfriamiento': TimeInput(attrs={'type': 'time'}),
             'Despulpado': TimeInput(attrs={'type': 'time'}),
-            'Ultima_Coccion': TimeInput(attrs={'type': 'time'}),
-            'Hora_Final': TimeInput(attrs={'type': 'time'}),
+            'Segunda_Coccion': TimeInput(attrs={'type': 'time'}),
+            'Empaque': TimeInput(attrs={'type': 'time'}),
+            'Hora_Final' : TimeInput(attrs={'type': 'time'}),
         }
 
 class RegistroDesechosForm(forms.ModelForm):
     class Meta:
         model = Registro
-        fields = ['Desechos_Mora', 'Semilla', 'Pulpa']
+        fields = ['Semilla', 'Pulpa']
 
 class RegistroBrixForm(forms.ModelForm):
     class Meta:
@@ -47,10 +48,10 @@ class RegistroBrixForm(forms.ModelForm):
             'Hora_Brix_Final': TimeInput(attrs={'type': 'time'}),
         }
 
-class RegistroPaquetesForm(forms.ModelForm):
+class RegistroEmpacadosForm(forms.ModelForm):
     class Meta:
         model = Registro
-        fields = ['Paquete_250_gr', 'Paquete_500_gr', 'Paquete_5000_gr']
+        fields = ['Producto_Terminado', 'Media_Libra', 'Libra', 'Bolsa_Cinco_kg', 'Otro']
 
 
 class SeleccionarRegistrosForm(forms.Form):

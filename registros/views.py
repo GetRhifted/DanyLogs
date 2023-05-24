@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 
-from .forms import RegistroGeneralForm, RegistroIngredientesForm, RegistroTiemposForm, RegistroDesechosForm, RegistroBrixForm, RegistroPaquetesForm, CompararRegistrosForm, RegistrodeUsuarioForm
+from .forms import RegistroGeneralForm, RegistroCanastaForm, RegistroTiemposForm, RegistroDesechosForm, RegistroBrixForm, RegistroEmpacadosForm, CompararRegistrosForm, RegistrodeUsuarioForm
 from. models import Registro
 
 import openpyxl
@@ -25,32 +25,36 @@ class HomeView(ListView):
 
 class RegistroWizardView(SessionWizardView):
     template_name = 'registros/registro_wizard.html'
-    form_list = [RegistroGeneralForm, RegistroIngredientesForm, RegistroTiemposForm, RegistroDesechosForm,
-                 RegistroBrixForm, RegistroPaquetesForm]
+    form_list = [RegistroGeneralForm, RegistroCanastaForm, RegistroTiemposForm, RegistroDesechosForm,
+                 RegistroBrixForm, RegistroEmpacadosForm]
     #success_url = reverse_lazy('registros:registro_completado')
 
     def done(self, form_list, **kwargs):
-        registro = Registro(Bache=form_list[0].cleaned_data['Bache'],
+        registro = Registro(Canasta=form_list[0].cleaned_data['Canasta'],
                             Fecha=form_list[0].cleaned_data['Fecha'],
-                            Gramos_de_Mora=form_list[1].cleaned_data['Gramos_de_Mora'],
-                            Gramos_de_Azucar=form_list[1].cleaned_data['Gramos_de_Azucar'],
-                            Gramos_de_Sorbato=form_list[1].cleaned_data['Gramos_de_Sorbato'],
-                            Hora_Inicio=form_list[2].cleaned_data['Hora_Inicio'],
-                            Primer_Hervor=form_list[2].cleaned_data['Primer_Hervor'],
-                            Pausa_de_enfriado=form_list[2].cleaned_data['Pausa_de_enfriado'],
+                            Contenido_Total=form_list[1].cleaned_data['Contenido_Total'],
+                            Azucar=form_list[1].cleaned_data['Azucar'],
+                            Sorbato=form_list[1].cleaned_data['Sorbato'],
+                            Producto_no_Conforme=form_list[1].cleaned_data['Producto_no_Conforme'],
+                            Fruta_Seleccionada=form_list[1].cleaned_data['Fruta_Seleccionada'],
+                            Inicio=form_list[2].cleaned_data['Inicio'],
+                            Primera_Coccion=form_list[2].cleaned_data['Primera_Coccion'],
+                            Enfriamiento=form_list[2].cleaned_data['Enfriamiento'],
                             Despulpado=form_list[2].cleaned_data['Despulpado'],
-                            Ultima_Coccion=form_list[2].cleaned_data['Ultima_Coccion'],
+                            Segunda_Coccion=form_list[2].cleaned_data['Segunda_Coccion'],
+                            Empaque=form_list[2].cleaned_data['Empaque'],
                             Hora_Final=form_list[2].cleaned_data['Hora_Final'],
-                            Desechos_Mora=form_list[3].cleaned_data['Desechos_Mora'],
                             Semilla=form_list[3].cleaned_data['Semilla'],
                             Pulpa=form_list[3].cleaned_data['Pulpa'],
                             Valor_Primer_Brix=form_list[4].cleaned_data['Valor_Primer_Brix'],
                             Hora_Primer_Brix=form_list[4].cleaned_data['Hora_Primer_Brix'],
                             Valor_Brix_Final=form_list[4].cleaned_data['Valor_Brix_Final'],
                             Hora_Brix_Final=form_list[4].cleaned_data['Hora_Brix_Final'],
-                            Paquete_250_gr=form_list[5].cleaned_data['Paquete_250_gr'],
-                            Paquete_500_gr=form_list[5].cleaned_data['Paquete_500_gr'],
-                            Paquete_5000_gr=form_list[5].cleaned_data['Paquete_5000_gr'],
+                            Producto_Terminado=form_list[5].cleaned_data['Producto_Terminado'],
+                            Media_Libra=form_list[5].cleaned_data['Media_Libra'],
+                            Libra=form_list[5].cleaned_data['Libra'],
+                            Bolsa_Cinco_kg=form_list[5].cleaned_data['Bolsa_Cinco_kg'],
+                            Otro=form_list[5].cleaned_data['Otro'],
                             )
         registro.save()
         return redirect('registros:registro_completado')
@@ -88,7 +92,7 @@ class RegistroUpdateView(UpdateView):
 
 class RegistroUpdateView2(UpdateView):
      model = Registro
-     form_class = RegistroIngredientesForm
+     form_class = RegistroCanastaForm
      template_name = 'registros/edicion_registro2.html'
      
      def get_success_url(self):
@@ -120,7 +124,7 @@ class RegistroUpdateView5(UpdateView):
 
 class RegistroUpdateView6(UpdateView):
      model = Registro
-     form_class = RegistroPaquetesForm
+     form_class = RegistroEmpacadosForm
      template_name = 'registros/edicion_registro6.html'
      
      def get_success_url(self):
@@ -150,27 +154,31 @@ class CompararRegistrosView(FormView):
         datos = []
         for registro in registros:
             datos.append([
-                registro.Bache,
+                registro.Canasta,
                 registro.Fecha,
-                registro.Gramos_de_Mora,
-                registro.Gramos_de_Azucar,
-                registro.Gramos_de_Sorbato,
-                registro.Hora_Inicio,
-                registro.Primer_Hervor,
-                registro.Pausa_de_enfriado,
+                registro.Contenido_Total,
+                registro.Azucar,
+                registro.Sorbato,
+                registro.Producto_no_Conforme,
+                registro.Fruta_Seleccionada,
+                registro.Inicio,
+                registro.Primera_Coccion,
+                registro.Enfriamiento,
                 registro.Despulpado,
-                registro.Ultima_Coccion,
+                registro.Segunda_Coccion,
+                registro.Empaque,
                 registro.Hora_Final,
-                registro.Desechos_Mora,
                 registro.Semilla,
                 registro.Pulpa,
                 registro.Valor_Primer_Brix,
                 registro.Hora_Primer_Brix,
                 registro.Valor_Brix_Final,
                 registro.Hora_Brix_Final,
-                registro.Paquete_250_gr,
-                registro.Paquete_500_gr,
-                registro.Paquete_5000_gr,
+                registro.Producto_Terminado,
+                registro.Media_Libra,
+                registro.Libra,
+                registro.Bolsa_Cinco_kg,
+                registro.Otro,
             ])
 
         # Crear un libro de Excel y una hoja de cálculo
@@ -179,27 +187,31 @@ class CompararRegistrosView(FormView):
 
         # Escribir los encabezados de la tabla
         encabezados = [
-            'Bache',
+            'Canasta',
             'Fecha',
-            'Gramos de Mora Usados',
-            'Gramos de Azúcar',
-            'Gramos de Sorbato',
-            'Hora Inicio',
-            'Primer Hervor',
-            'Pausa de enfriado',
+            'Contenido Total Usado',
+            'Azúcar',
+            'Sorbato',
+            'Producto no Conforme',
+            'Fruta Seleccionada',
+            'Inicio',
+            'Primera Cocción',
+            'Enfriamiento',
             'Despulpado',
-            'Última Cocción',
+            'Segunda Cocción',
+            'Empaque',
             'Hora Final',
-            'Desechos Mora',
             'Semilla',
             'Pulpa',
             'Valor Primer Brix',
             'Hora Primer Brix',
             'Valor Brix Final',
             'Hora Brix Final',
-            'Paquete 250 gr',
-            'Paquete 500 gr',
-            'Paquete 5000 gr',
+            'Producto Terminado',
+            'Media Libra',
+            'Libra',
+            'Bolsa Cinco kg',
+            'Otro',
         ]
         hoja.append(encabezados)
 

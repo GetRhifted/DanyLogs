@@ -2,21 +2,23 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Registro(models.Model):    
-    Bache = models.CharField(max_length=100)
+    Canasta = models.CharField(max_length=100)
     Fecha = models.DateField()
 
-    Gramos_de_Mora = models.FloatField(default=0.0)
-    Gramos_de_Azucar = models.FloatField(default=0.0)
-    Gramos_de_Sorbato = models.FloatField(default=0.0)
-
-    Hora_Inicio = models.TimeField()
-    Primer_Hervor = models.TimeField()
-    Pausa_de_enfriado = models.TimeField()
+    Contenido_Total = models.FloatField(default=0.0)
+    Azucar = models.FloatField(default=0.0)
+    Sorbato = models.FloatField(default=0.0)
+    Producto_no_Conforme = models.FloatField(default=0.0)
+    Fruta_Seleccionada = models.FloatField(default=0.0)
+    
+    Inicio = models.TimeField()
+    Primera_Coccion = models.TimeField()
+    Enfriamiento = models.TimeField()
     Despulpado = models.TimeField()
-    Ultima_Coccion = models.TimeField()
+    Segunda_Coccion = models.TimeField()
+    Empaque = models.TimeField()
     Hora_Final = models.TimeField()
 
-    Desechos_Mora = models.FloatField(default=0.0)
     Semilla = models.FloatField(default=0.0)
     Pulpa = models.FloatField(default=0.0)
 
@@ -25,11 +27,13 @@ class Registro(models.Model):
     Valor_Brix_Final = models.FloatField(default=0.0)
     Hora_Brix_Final = models.TimeField()
 
-    Paquete_250_gr = models.IntegerField(default=0)
-    Paquete_500_gr = models.IntegerField(default=0)
-    Paquete_5000_gr = models.IntegerField(default=0)
+    Producto_Terminado = models.IntegerField(default=0) 
+    Media_Libra = models.IntegerField(default=0)
+    Libra = models.IntegerField(default=0)
+    Bolsa_Cinco_kg = models.IntegerField(default=0)
+    Otro = models.IntegerField(default=0, null=True)
 
     def __str__(self):
-        return self.Bache
+        return self.Canasta
 
 

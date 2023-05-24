@@ -27,7 +27,7 @@
         <h3>Tus últimos 10 registros</h3>
         <ul class="record-list">
           {% for registro in object_list %}
-            <li><a href="{% url 'registros:registro_detallado' pk=registro.pk %}">{{ registro.Bache }}</a></li>
+            <li><a href="{% url 'registros:registro_detallado' pk=registro.pk %}">{{ registro.Canasta }}</a></li>
           {% endfor %}
         </ul>
         <a href="{% url 'registros:registro_wizard' %}" class="btn btn-primary">Crear nuevo registro</a>
